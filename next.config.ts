@@ -1,7 +1,6 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+const nextConfig = {
+  serverExternalPackages: ["pino", "thread-stream"],
 };
 
-export default nextConfig;
+module.exports = nextConfig;
+
