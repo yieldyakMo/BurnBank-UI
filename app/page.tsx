@@ -170,6 +170,53 @@ export default function Home() {
           </ul>
         </section>
 
+        {/* ================= Explorer Links ================= */}
+<div
+  style={{
+    marginTop: 24,
+    padding: "16px 20px",
+    borderRadius: 14,
+    background: "rgba(0,0,0,0.35)",
+    border: "1px solid rgba(255,255,255,0.08)",
+  }}
+>
+  <h3 style={{ marginBottom: 8 }}>Explorer</h3>
+
+  <p style={{ opacity: 0.85, marginBottom: 12 }}>
+    Verify BurnBank contracts directly on the Monad block explorer.
+  </p>
+
+  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+    <a
+      href="https://monadvision.com/token/0x81D61e48BCe95aB2Cd16Ced67B8d4aaf682B8350?tab=Contract"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        color: "#ff4d4f",
+        textDecoration: "none",
+        fontWeight: 600,
+      }}
+    >
+      🔍 View BBNK Token on MonadVision →
+    </a>
+
+    <a
+      href="https://monadvision.com/address/0x98275b6127BA4443A90b08840E9B7eF2E4CB2fbf"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        color: "#ff4d4f",
+        textDecoration: "none",
+        fontWeight: 600,
+      }}
+    >
+      🔍 View Staking Contract on MonadVision →
+    </a>
+  </div>
+</div>
+{/* ================================================ */}
+        
+
         {/* Footer */}
         <footer style={{ opacity: 0.65, fontSize: 12, lineHeight: 1.6, paddingBottom: 10 }}>
           © {new Date().getFullYear()} BurnBank • Not financial advice • Use at your own risk
