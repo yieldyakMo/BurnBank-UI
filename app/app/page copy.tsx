@@ -19,7 +19,6 @@ import { client } from "../client";
 import StakingCard from "../stakingcard";
 
 const TOKEN_ADDRESS = "0x81D61e48BCe95aB2Cd16Ced67B8d4aaf682B8350";
-const STAKING_ADDRESS = "0x98275b6127BA4443A90b08840E9B7eF2E4CB2fbf";
 const DEAD_ADDRESS = "0x000000000000000000000000000000000000dEaD";
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
@@ -124,8 +123,7 @@ export default function Home() {
   const human = amount.trim();
   const amountRaw = safeToUnits(human, DECIMALS);
 
-  const canSend =
-    !!account?.address && amountRaw > 0n && (balanceRaw ?? 0n) >= amountRaw;
+  const canSend = !!account?.address && amountRaw > 0n && (balanceRaw ?? 0n) >= amountRaw;
   const canSendTo = canSend && !!to.trim();
 
   const { mutate: sendTx, isPending, error: txError } = useSendTransaction();
@@ -140,8 +138,7 @@ export default function Home() {
     if (amountRawLocal <= 0n) return alert("Amount must be > 0.");
 
     const bal = balanceRaw ?? 0n;
-    if (amountRawLocal > bal)
-      return alert("Insufficient BBNK balance for that amount.");
+    if (amountRawLocal > bal) return alert("Insufficient BBNK balance for that amount.");
 
     if (destination !== DEAD_ADDRESS) {
       const dest = destination.trim();
@@ -306,207 +303,6 @@ export default function Home() {
           </div>
         </header>
 
-        {/* ================= TRUST + STATUS ================= */}
-        <section
-          style={{
-            marginTop: 10,
-            marginBottom: 4,
-            padding: 14,
-            borderRadius: 16,
-            border: "1px solid rgba(255,255,255,0.10)",
-            background:
-              "linear-gradient(180deg, rgba(255,70,70,0.10), rgba(0,0,0,0.25))",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: 12,
-              flexWrap: "wrap",
-              alignItems: "flex-start",
-            }}
-          >
-            <div>
-              <div style={{ fontWeight: 900, letterSpacing: 0.2 }}>
-                Trust &amp; Status
-              </div>
-              <div style={{ opacity: 0.82, fontSize: 13, marginTop: 4 }}>
-                Early release. Always verify contract addresses before
-                interacting.
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                gap: 8,
-                flexWrap: "wrap",
-                alignItems: "center",
-              }}
-            >
-              <span
-                style={{
-                  padding: "6px 10px",
-                  borderRadius: 999,
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  background: "rgba(0,0,0,0.35)",
-                  fontSize: 12,
-                }}
-              >
-                Network: <b>Monad</b>
-              </span>
-
-              <span
-                style={{
-                  padding: "6px 10px",
-                  borderRadius: 999,
-                  border: "1px solid rgba(255,255,255,0.12)",
-                  background: "rgba(0,0,0,0.35)",
-                  fontSize: 12,
-                }}
-              >
-                Status: <b>Live (Beta)</b>
-              </span>
-
-              <span
-                style={{
-                  padding: "6px 10px",
-                  borderRadius: 999,
-                  border: "1px solid rgba(255,120,120,0.25)",
-                  background: "rgba(255,70,70,0.10)",
-                  fontSize: 12,
-                }}
-              >
-                ⚠️ <b>Unaudited</b>
-              </span>
-            </div>
-          </div>
-
-          <div
-            style={{
-              marginTop: 12,
-              display: "grid",
-              gridTemplateColumns: "1fr",
-              gap: 10,
-            }}
-          >
-            <div
-              style={{
-                padding: 12,
-                borderRadius: 12,
-                border: "1px solid rgba(255,255,255,0.10)",
-                background: "rgba(0,0,0,0.30)",
-              }}
-            >
-              <div style={{ fontSize: 12, opacity: 0.75 }}>BBNK Token</div>
-              <div
-                style={{
-                  fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-                  fontSize: 12,
-                  marginTop: 6,
-                  wordBreak: "break-all",
-                }}
-              >
-                {TOKEN_ADDRESS}
-              </div>
-              <div
-                style={{
-                  marginTop: 8,
-                  display: "flex",
-                  gap: 10,
-                  flexWrap: "wrap",
-                  alignItems: "center",
-                }}
-              >
-                <button
-                  onClick={() => navigator.clipboard.writeText(TOKEN_ADDRESS)}
-                  style={{
-                    padding: "8px 10px",
-                    borderRadius: 10,
-                    border: "1px solid rgba(255,255,255,0.12)",
-                    background: "rgba(0,0,0,0.35)",
-                    cursor: "pointer",
-                    fontSize: 12,
-                    fontWeight: 900,
-                    color: "#fff",
-                  }}
-                >
-                  Copy
-                </button>
-                <a
-                  href={`https://monadvision.com/address/${TOKEN_ADDRESS}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ fontSize: 12, opacity: 0.85, color: "#fff" }}
-                >
-                  View on Explorer →
-                </a>
-              </div>
-            </div>
-
-            <div
-              style={{
-                padding: 12,
-                borderRadius: 12,
-                border: "1px solid rgba(255,255,255,0.10)",
-                background: "rgba(0,0,0,0.30)",
-              }}
-            >
-              <div style={{ fontSize: 12, opacity: 0.75 }}>
-                Staking Contract
-              </div>
-              <div
-                style={{
-                  fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-                  fontSize: 12,
-                  marginTop: 6,
-                  wordBreak: "break-all",
-                }}
-              >
-                {STAKING_ADDRESS}
-              </div>
-              <div
-                style={{
-                  marginTop: 8,
-                  display: "flex",
-                  gap: 10,
-                  flexWrap: "wrap",
-                  alignItems: "center",
-                }}
-              >
-                <button
-                  onClick={() =>
-                    navigator.clipboard.writeText(STAKING_ADDRESS)
-                  }
-                  style={{
-                    padding: "8px 10px",
-                    borderRadius: 10,
-                    border: "1px solid rgba(255,255,255,0.12)",
-                    background: "rgba(0,0,0,0.35)",
-                    cursor: "pointer",
-                    fontSize: 12,
-                    fontWeight: 900,
-                    color: "#fff",
-                  }}
-                >
-                  Copy
-                </button>
-                <a
-                  href={`https://monadvision.com/address/${STAKING_ADDRESS}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ fontSize: 12, opacity: 0.85, color: "#fff" }}
-                >
-                  View on Explorer →
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-        {/* ================================================ */}
-
         <div style={styles.sectionStack}>
           {/* CONNECT + STATS CARD */}
           <section style={styles.card}>
@@ -644,7 +440,7 @@ export default function Home() {
             <div style={{ marginTop: 18 }}>
               <StakingCard
                 tokenAddress={TOKEN_ADDRESS}
-                stakingAddress={STAKING_ADDRESS}
+                stakingAddress="0x98275b6127BA4443A90b08840E9B7eF2E4CB2fbf"
                 chain={chain}
               />
             </div>
