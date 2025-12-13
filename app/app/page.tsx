@@ -20,6 +20,8 @@ import StakingCard from "../stakingcard";
 
 const TOKEN_ADDRESS = "0x81D61e48BCe95aB2Cd16Ced67B8d4aaf682B8350";
 const STAKING_ADDRESS = "0x98275b6127BA4443A90b08840E9B7eF2E4CB2fbf";
+const POOL_ADDRESS = "0xbd4a095e0697a2b3996c992e6e0353daa914ddb7";
+
 const DEAD_ADDRESS = "0x000000000000000000000000000000000000dEaD";
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
@@ -392,6 +394,7 @@ export default function Home() {
               gap: 10,
             }}
           >
+            {/* TOKEN */}
             <div
               style={{
                 padding: 12,
@@ -436,16 +439,74 @@ export default function Home() {
                   Copy
                 </button>
                 <a
-                  href={`https://monadvision.com/address/${TOKEN_ADDRESS}`}
+                  href={`https://monadvision.com/token/${TOKEN_ADDRESS}`}
                   target="_blank"
                   rel="noreferrer"
                   style={{ fontSize: 12, opacity: 0.85, color: "#fff" }}
                 >
-                  View on Explorer →
+                  View Token →
                 </a>
               </div>
             </div>
 
+            {/* LIQUIDITY POOL (ATLANTIS) */}
+            <div
+              style={{
+                padding: 12,
+                borderRadius: 12,
+                border: "1px solid rgba(255,255,255,0.10)",
+                background: "rgba(0,0,0,0.30)",
+              }}
+            >
+              <div style={{ fontSize: 12, opacity: 0.75 }}>
+                Liquidity Pool (Atlantis)
+              </div>
+              <div
+                style={{
+                  fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+                  fontSize: 12,
+                  marginTop: 6,
+                  wordBreak: "break-all",
+                }}
+              >
+                {POOL_ADDRESS}
+              </div>
+              <div
+                style={{
+                  marginTop: 8,
+                  display: "flex",
+                  gap: 10,
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                }}
+              >
+                <button
+                  onClick={() => navigator.clipboard.writeText(POOL_ADDRESS)}
+                  style={{
+                    padding: "8px 10px",
+                    borderRadius: 10,
+                    border: "1px solid rgba(255,255,255,0.12)",
+                    background: "rgba(0,0,0,0.35)",
+                    cursor: "pointer",
+                    fontSize: 12,
+                    fontWeight: 900,
+                    color: "#fff",
+                  }}
+                >
+                  Copy
+                </button>
+                <a
+                  href={`https://app.atlantisdex.xyz/pools/pool/${POOL_ADDRESS}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 12, opacity: 0.85, color: "#fff" }}
+                >
+                  View Liquidity →
+                </a>
+              </div>
+            </div>
+
+            {/* STAKING */}
             <div
               style={{
                 padding: 12,
@@ -513,7 +574,9 @@ export default function Home() {
             <div style={styles.cardTitleRow}>
               <h2 style={styles.h2}>Overview</h2>
               <div style={styles.smallMono} title={account?.address ?? ""}>
-                {account?.address ? `Wallet: ${shortAddr(account.address)}` : "Wallet: Not connected"}
+                {account?.address
+                  ? `Wallet: ${shortAddr(account.address)}`
+                  : "Wallet: Not connected"}
               </div>
             </div>
 
@@ -527,35 +590,45 @@ export default function Home() {
               <div style={styles.stat}>
                 <div style={styles.label}>BBNK Balance</div>
                 <div style={styles.value}>
-                  {balanceLoading ? "Loading…" : `${formatNumber(balanceHuman)} BBNK`}
+                  {balanceLoading
+                    ? "Loading…"
+                    : `${formatNumber(balanceHuman)} BBNK`}
                 </div>
               </div>
 
               <div style={styles.stat}>
                 <div style={styles.label}>Total Supply</div>
                 <div style={styles.value}>
-                  {totalSupplyLoading ? "Loading…" : `${formatNumber(totalSupplyHuman)} BBNK`}
+                  {totalSupplyLoading
+                    ? "Loading…"
+                    : `${formatNumber(totalSupplyHuman)} BBNK`}
                 </div>
               </div>
 
               <div style={styles.stat}>
                 <div style={styles.label}>Total Burned</div>
                 <div style={styles.value}>
-                  {burnedLoading ? "Loading…" : `${formatNumber(burnedHuman)} BBNK`}
+                  {burnedLoading
+                    ? "Loading…"
+                    : `${formatNumber(burnedHuman)} BBNK`}
                 </div>
               </div>
 
               <div style={styles.stat}>
                 <div style={styles.label}>Burned %</div>
                 <div style={styles.value}>
-                  {statsLoading ? "Loading…" : formatPercent(burnedHuman, totalSupplyHuman)}
+                  {statsLoading
+                    ? "Loading…"
+                    : formatPercent(burnedHuman, totalSupplyHuman)}
                 </div>
               </div>
 
               <div style={styles.stat}>
                 <div style={styles.label}>Circulating Supply</div>
                 <div style={styles.value}>
-                  {statsLoading ? "Loading…" : `${formatNumber(circulatingHuman)} BBNK`}
+                  {statsLoading
+                    ? "Loading…"
+                    : `${formatNumber(circulatingHuman)} BBNK`}
                 </div>
               </div>
 
@@ -570,13 +643,19 @@ export default function Home() {
             </div>
 
             {totalSupplyError && (
-              <div style={styles.error}>Supply read error: {String(totalSupplyError)}</div>
+              <div style={styles.error}>
+                Supply read error: {String(totalSupplyError)}
+              </div>
             )}
             {balanceError && (
-              <div style={styles.error}>Balance read error: {String(balanceError)}</div>
+              <div style={styles.error}>
+                Balance read error: {String(balanceError)}
+              </div>
             )}
             {burnedError && (
-              <div style={styles.error}>Burn read error: {String(burnedError)}</div>
+              <div style={styles.error}>
+                Burn read error: {String(burnedError)}
+              </div>
             )}
           </section>
 
@@ -634,10 +713,13 @@ export default function Home() {
               </div>
 
               <div style={styles.helper}>
-                Burn sends tokens to an irrecoverable address. Total supply does not change; tokens are simply locked forever.
+                Burn sends tokens to an irrecoverable address. Total supply does
+                not change; tokens are simply locked forever.
               </div>
 
-              {txError ? <div style={styles.error}>Tx error: {String(txError)}</div> : null}
+              {txError ? (
+                <div style={styles.error}>Tx error: {String(txError)}</div>
+              ) : null}
             </div>
 
             {/* STAKING SECTION */}
