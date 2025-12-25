@@ -28,28 +28,62 @@ const ERC20_APPROVE_ABI = [
 ] as const;
 
 const STAKING_ABI = [
-  { type: "function", name: "stake", stateMutability: "nonpayable", inputs: [{ name: "amount", type: "uint256" }], outputs: [] },
-  { type: "function", name: "withdraw", stateMutability: "nonpayable", inputs: [{ name: "amount", type: "uint256" }], outputs: [] },
-  { type: "function", name: "getReward", stateMutability: "nonpayable", inputs: [], outputs: [] },
+  {
+    type: "function",
+    name: "stake",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "amount", type: "uint256" }],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "withdraw",
+    stateMutability: "nonpayable",
+    inputs: [{ name: "amount", type: "uint256" }],
+    outputs: [],
+  },
+  {
+    type: "function",
+    name: "getReward",
+    stateMutability: "nonpayable",
+    inputs: [],
+    outputs: [],
+  },
 
-  { type: "function", name: "earned", stateMutability: "view", inputs: [{ name: "account", type: "address" }], outputs: [{ name: "", type: "uint256" }] },
-  { type: "function", name: "balanceOf", stateMutability: "view", inputs: [{ name: "account", type: "address" }], outputs: [{ name: "", type: "uint256" }] },
-  { type: "function", name: "periodFinish", stateMutability: "view", inputs: [], outputs: [{ name: "", type: "uint256" }] },
-  { type: "function", name: "rewardsDuration", stateMutability: "view", inputs: [], outputs: [{ name: "", type: "uint256" }] },
+  {
+    type: "function",
+    name: "earned",
+    stateMutability: "view",
+    inputs: [{ name: "account", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "balanceOf",
+    stateMutability: "view",
+    inputs: [{ name: "account", type: "address" }],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "periodFinish",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "rewardsDuration",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }],
+  },
 ] as const;
 
 type Props = {
   tokenAddress: string;
   stakingAddress: string;
   chain: Chain;
-};
-
-// Staking contract expects WHOLE tokens (integer), not wei
-const parseWholeTokens = (s: string): bigint => {
-  const v = s.trim();
-  if (!v) return 0n;
-  if (v.includes(".")) throw new Error("Whole numbers only for staking (no decimals).");
-  return BigInt(v);
 };
 
 function formatUnitsSafe(value?: bigint, decimals = 18) {
@@ -166,8 +200,8 @@ export default function StakingCard({ tokenAddress, stakingAddress, chain }: Pro
   const earnedBalWei = (earnedRewards.data as bigint | undefined) ?? 0n;
   const allowanceWei = tokenAllowance.data ?? 0n;
 
-  // approve uses wei
-  const amountWeiForApprove = useMemo(() => {
+  // ✅ Use WEI for approve/stake/withdraw (staking contract expects token base units)
+  const amountWei = useMemo(() => {
     try {
       return toUnits(amount || "0", DECIMALS);
     } catch {
@@ -175,33 +209,29 @@ export default function StakingCard({ tokenAddress, stakingAddress, chain }: Pro
     }
   }, [amount]);
 
-  // stake/withdraw uses whole tokens
-  const amountWhole = useMemo(() => {
-    try {
-      return parseWholeTokens(amount);
-    } catch {
-      return -1n;
-    }
+  const amountInputInvalid = useMemo(() => {
+    const v = amount.trim();
+    if (!v) return false;
+    // Basic guard: toUnits will throw on invalid; we treat amountWei==0 with non-zero text as invalid below
+    // This keeps behavior simple without being overly strict.
+    return false;
   }, [amount]);
 
-  const allowanceOk = allowanceWei >= amountWeiForApprove && amountWeiForApprove > 0n;
+  const allowanceOk = allowanceWei >= amountWei && amountWei > 0n;
 
-  const walletBalWhole = walletBalWei / 10n ** 18n;
-  const stakedBalWhole = stakedBalWei / 10n ** 18n;
-
-  const canApprove = !!address && amountWeiForApprove > 0n && busy === null;
+  const canApprove = !!address && busy === null && amountWei > 0n;
   const canStake =
     !!address &&
     busy === null &&
-    allowanceOk &&
-    amountWhole > 0n &&
-    amountWhole <= walletBalWhole;
+    amountWei > 0n &&
+    amountWei <= walletBalWei &&
+    allowanceWei >= amountWei;
 
   const canWithdraw =
     !!address &&
     busy === null &&
-    amountWhole > 0n &&
-    amountWhole <= stakedBalWhole;
+    amountWei > 0n &&
+    amountWei <= stakedBalWei;
 
   const canClaim = !!address && busy === null;
 
@@ -223,12 +253,12 @@ export default function StakingCard({ tokenAddress, stakingAddress, chain }: Pro
   // Actions
   const doApprove = () => {
     if (!address) return;
-    if (amountWeiForApprove <= 0n) return;
+    if (amountWei <= 0n) return;
 
     const tx = prepareContractCall({
       contract: tokenWrite,
       method: "approve",
-      params: [stakingAddress, amountWeiForApprove],
+      params: [stakingAddress, amountWei],
     });
 
     runPrepared("approve", tx);
@@ -236,40 +266,28 @@ export default function StakingCard({ tokenAddress, stakingAddress, chain }: Pro
 
   const doStake = () => {
     if (!address) return;
+    if (amountWei <= 0n) return;
 
-    try {
-      const raw = parseWholeTokens(amount);
-      if (raw <= 0n) return;
+    const tx = prepareContractCall({
+      contract: staking,
+      method: "stake",
+      params: [amountWei], // ✅ wei
+    });
 
-      const tx = prepareContractCall({
-        contract: staking,
-        method: "stake",
-        params: [raw],
-      });
-
-      runPrepared("stake", tx);
-    } catch (e: any) {
-      setBanner({ type: "error", msg: String(e?.message ?? e) });
-    }
+    runPrepared("stake", tx);
   };
 
   const doWithdraw = () => {
     if (!address) return;
+    if (amountWei <= 0n) return;
 
-    try {
-      const raw = parseWholeTokens(amount);
-      if (raw <= 0n) return;
+    const tx = prepareContractCall({
+      contract: staking,
+      method: "withdraw",
+      params: [amountWei], // ✅ wei
+    });
 
-      const tx = prepareContractCall({
-        contract: staking,
-        method: "withdraw",
-        params: [raw],
-      });
-
-      runPrepared("withdraw", tx);
-    } catch (e: any) {
-      setBanner({ type: "error", msg: String(e?.message ?? e) });
-    }
+    runPrepared("withdraw", tx);
   };
 
   const doClaim = () => {
@@ -297,8 +315,8 @@ export default function StakingCard({ tokenAddress, stakingAddress, chain }: Pro
   const amountHint =
     !address
       ? "Connect wallet to stake"
-      : amountWhole === -1n
-        ? "Whole numbers only (no decimals) for staking"
+      : amountWei <= 0n
+        ? "Enter an amount"
         : !allowanceOk
           ? "Approve first, then Stake"
           : "Ready to stake";
@@ -438,30 +456,35 @@ export default function StakingCard({ tokenAddress, stakingAddress, chain }: Pro
             {balStr} <span style={{ fontWeight: 700, opacity: 0.8 }}>BBNK</span>
           </div>
         </div>
+
         <div style={styles.stat}>
           <div style={styles.label}>Staked</div>
           <div style={styles.value}>
             {stakedStr} <span style={{ fontWeight: 700, opacity: 0.8 }}>BBNK</span>
           </div>
         </div>
+
         <div style={styles.stat}>
           <div style={styles.label}>Earned</div>
           <div style={styles.value}>
             {earnedStr} <span style={{ fontWeight: 700, opacity: 0.8 }}>BBNK</span>
           </div>
         </div>
+
         <div style={styles.stat}>
           <div style={styles.label}>Allowance to Staking</div>
           <div style={styles.value}>
             {allowanceStr} <span style={{ fontWeight: 700, opacity: 0.8 }}>BBNK</span>
           </div>
         </div>
+
         <div style={styles.stat}>
           <div style={styles.label}>Rewards Duration</div>
           <div style={styles.value}>
             {durationDays} <span style={{ fontWeight: 700, opacity: 0.8 }}>days</span>
           </div>
         </div>
+
         <div style={styles.stat}>
           <div style={styles.label}>Period Finish</div>
           <div style={{ ...styles.value, fontSize: 14, fontWeight: 800 }}>{finishHuman}</div>
@@ -506,7 +529,7 @@ export default function StakingCard({ tokenAddress, stakingAddress, chain }: Pro
             ...styles.btn("primary"),
             ...(canStake ? {} : styles.btnDisabled),
           }}
-          title={!allowanceOk ? "Approve first" : "Stake (whole tokens)"}
+          title={!allowanceOk ? "Approve first" : "Stake"}
         >
           {busy === "stake" ? "Staking…" : "Stake"}
         </button>
