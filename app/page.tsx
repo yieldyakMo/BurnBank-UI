@@ -11,18 +11,23 @@ const STAKING_ADDRESS = "0x98275b6127BA4443A90b08840E9B7eF2E4CB2fbf";
 const MONADVISION_TOKEN =
   "https://monadvision.com/token/0x81D61e48BCe95aB2Cd16Ced67B8d4aaf682B8350";
 
-const ATLANTIS_SWAP =
-  "https://app.atlantisdex.xyz/swap/v4/?inputCurrency=0x0000000000000000000000000000000000000000&outputCurrency=0x81D61e48BCe95aB2Cd16Ced67B8d4aaf682B8350";
 
 const GMGN_LINK =
   "https://gmgn.ai/monad/token/0x81d61e48bce95ab2cd16ced67b8d4aaf682b8350";
 
 const MACE_LINK = "https://www.mace.ag";
 
-// Optional (update when you have them)
-const DISCORD_INVITE = "https://discord.gg/your-invite";
-const X_URL = "https://x.com/yourhandle";
-const REDDIT_URL = "https://www.reddit.com/user/Monad_Burn_Bank";
+const REDDIT_URL = "https://www.reddit.com/r/burnbank";
+
+const DISCORD_INVITE = "https://discord.gg/6WKZnYCgDu";
+
+const X_URL = "https://x.com/Monad_Burn_Bank";
+
+const GECKOTERMINAL_LINK =
+  "https://www.geckoterminal.com/monad/pools/0x35d4bb30ccfd698acc2dd0778cb1581474263bad";
+ 
+
+
 
 function shortAddr(addr: string) {
   if (!addr) return "";
@@ -271,14 +276,20 @@ export default function Page() {
           </div>
 
           {/* Right: buttons */}
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
-            <ButtonLink href="/app" variant="primary">
-              Open Staking App →
-            </ButtonLink>
-            <ButtonLink href={MONADVISION_TOKEN} variant="ghost" external>
-              View on MonadVision
-            </ButtonLink>
-          </div>
+         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
+  <ButtonLink href="/app" variant="primary">
+    Open Staking App →
+  </ButtonLink>
+
+  <ButtonLink href="/buy" variant="ghost">
+    Buy Crypto →
+  </ButtonLink>
+
+  <ButtonLink href={MONADVISION_TOKEN} variant="ghost" external>
+    View on MonadVision
+  </ButtonLink>
+</div>
+
         </header>
 
         {/* Hero + Contracts */}
@@ -388,6 +399,8 @@ export default function Page() {
                   <li>Token contract verified</li>
                   <li>Fixed supply minted at deploy</li>
                   <li>Public addresses posted above</li>
+                  <li>Listed and tracked on CoinGecko / GeckoTerminal</li>
+
                 </ul>
               ),
             },
@@ -429,58 +442,94 @@ export default function Page() {
           ))}
         </section>
 
-        {/* DEX + Explorer section */}
-        <section
-          style={{
-            marginTop: 16,
-            borderRadius: 22,
-            border: "1px solid rgba(255,255,255,0.10)",
-            background: "rgba(0,0,0,0.22)",
-            padding: 20,
-          }}
-        >
-          <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 12 }}>
-            Where to Buy BBNK
-          </div>
+     {/* DEX + Explorer section */}
+<section
+  style={{
+    marginTop: 16,
+    borderRadius: 22,
+    border: "1px solid rgba(255,255,255,0.10)",
+    background: "rgba(0,0,0,0.22)",
+    padding: 20,
+  }}
+>
+  <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 12 }}>
+    Where to Buy BBNK
+  </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: 14,
-            }}
-          >
-            <DexCard
-              name="Atlantis"
-              href={ATLANTIS_SWAP}
-              badge="Swap"
-              description="Direct swap link (MON → BBNK prefilled)."
-            />
-            <DexCard
-              name="GMGN"
-              href={GMGN_LINK}
-              badge="Token Page"
-              description="BBNK token page for analytics + routing."
-            />
-            <DexCard
-              name="Mace"
-              href={MACE_LINK}
-              badge="DEX"
-              description="Explore and swap on Mace."
-            />
-            <DexCard
-              name="MonadVision Explorer"
-              href={MONADVISION_TOKEN}
-              badge="Explorer"
-              description="Contract, holders, transfers, and verification details."
-            />
-          </div>
+  <div
+    style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+      gap: 14,
+    }}
+  >
+    <DexCard
+      name="Uniswap (Monad)"
+      href="https://app.uniswap.org/swap?inputCurrency=MON&outputCurrency=0x81D61e48BCe95aB2Cd16Ced67B8d4aaf682B8350"
+      badge="Swap"
+      description="Primary MON/BBNK liquidity venue."
+    />
 
-          <div style={{ marginTop: 14, fontSize: 12, opacity: 0.75, lineHeight: 1.5 }}>
-            If a swap fails, liquidity may be thin or price impact too high. Try a smaller trade size
-            or another DEX above.
-          </div>
-        </section>
+    <DexCard
+      name="Uniswap Pool"
+      href="https://app.uniswap.org/explore/pools/monad/0x35d4bb30ccfd698acc2dd0778cb1581474263bad"
+      badge="Pool"
+      description="View pool liquidity, price, and transactions."
+    />
+
+      <DexCard
+  name="GeckoTerminal"
+  href={GECKOTERMINAL_LINK}
+  badge="Charts"
+  description="Real-time charts, liquidity, and trade data for BBNK."
+/>
+    
+
+      <DexCard
+      name="MonadVision Explorer"
+      href={MONADVISION_TOKEN}
+      badge="Explorer"
+      description="Contract, holders, transfers, and verification details."
+    />
+
+    <DexCard
+      name="GMGN"
+      href={GMGN_LINK}
+      badge="Token Page"
+      description="Analytics + routing page (optional)."
+    />
+  </div>
+
+  <div style={{ marginTop: 14, fontSize: 12, opacity: 0.75, lineHeight: 1.5 }}>
+    Always verify the BBNK contract address before swapping.
+  </div>
+  <div
+  style={{
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    marginTop: 14,
+    opacity: 0.8,
+    fontSize: 12,
+  }}
+>
+  <Image
+    src="/geckoterminal_icon.png"
+    alt="GeckoTerminal"
+    width={18}
+    height={18}
+  />
+  <a
+    href={GECKOTERMINAL_LINK}
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{ textDecoration: "none", color: "inherit", fontWeight: 700 }}
+  >
+    View on GeckoTerminal
+  </a>
+</div>
+
+</section>
 
         <footer style={{ marginTop: 22, opacity: 0.65, fontSize: 12, padding: "6px 4px" }}>
           © {year} BurnBank • BBNK • Built on Monad
