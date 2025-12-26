@@ -285,7 +285,12 @@ export default function Page() {
     Buy Crypto →
   </ButtonLink>
 
-  <ButtonLink href={MONADVISION_TOKEN} variant="ghost" external>
+  <ButtonLink href="/bridge" variant="ghost">
+  Bridge Assets →
+</ButtonLink>
+ 
+
+ <ButtonLink href={MONADVISION_TOKEN} variant="ghost" external>
     View on MonadVision
   </ButtonLink>
 </div>
