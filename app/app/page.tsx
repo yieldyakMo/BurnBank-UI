@@ -2,6 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
+import PriceBadge from "../components/PriceBadge";
 import { useMemo, useState } from "react";
 import { getContract } from "thirdweb";
 import { defineChain } from "thirdweb/chains";
@@ -301,11 +302,14 @@ export default function Home() {
           </div>
 
           <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
-            <span style={styles.tag}>Token</span>
-            <span style={styles.smallMono} title={TOKEN_ADDRESS}>
-              {shortAddr(TOKEN_ADDRESS)}
-            </span>
-          </div>
+  <PriceBadge />
+
+  <span style={styles.tag}>Token</span>
+  <span style={styles.smallMono} title={TOKEN_ADDRESS}>
+    {shortAddr(TOKEN_ADDRESS)}
+  </span>
+</div>
+
         </header>
 
         {/* ================= TRUST + STATUS ================= */}
@@ -449,62 +453,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* LIQUIDITY POOL (ATLANTIS) */}
-            <div
-              style={{
-                padding: 12,
-                borderRadius: 12,
-                border: "1px solid rgba(255,255,255,0.10)",
-                background: "rgba(0,0,0,0.30)",
-              }}
-            >
-              <div style={{ fontSize: 12, opacity: 0.75 }}>
-                Liquidity Pool (Atlantis)
-              </div>
-              <div
-                style={{
-                  fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-                  fontSize: 12,
-                  marginTop: 6,
-                  wordBreak: "break-all",
-                }}
-              >
-                {POOL_ADDRESS}
-              </div>
-              <div
-                style={{
-                  marginTop: 8,
-                  display: "flex",
-                  gap: 10,
-                  flexWrap: "wrap",
-                  alignItems: "center",
-                }}
-              >
-                <button
-                  onClick={() => navigator.clipboard.writeText(POOL_ADDRESS)}
-                  style={{
-                    padding: "8px 10px",
-                    borderRadius: 10,
-                    border: "1px solid rgba(255,255,255,0.12)",
-                    background: "rgba(0,0,0,0.35)",
-                    cursor: "pointer",
-                    fontSize: 12,
-                    fontWeight: 900,
-                    color: "#fff",
-                  }}
-                >
-                  Copy
-                </button>
-                <a
-                  href={`https://app.atlantisdex.xyz/pools/pool/${POOL_ADDRESS}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ fontSize: 12, opacity: 0.85, color: "#fff" }}
-                >
-                  View Liquidity →
-                </a>
-              </div>
-            </div>
+            
 
             {/* STAKING */}
             <div
