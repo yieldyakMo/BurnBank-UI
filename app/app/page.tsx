@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import PriceBadge from "../components/PriceBadge";
+import PriceBadge from "./components/PriceBadge";
 import { useMemo, useState } from "react";
 import { getContract } from "thirdweb";
 import { defineChain } from "thirdweb/chains";
