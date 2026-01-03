@@ -97,26 +97,27 @@ export default function BridgePage() {
             </Link>
 
             <Link
-              href="/staking"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "10px 14px",
-                borderRadius: 14,
-                fontSize: 14,
-                fontWeight: 800,
-                textDecoration: "none",
-                border: "1px solid rgba(255,80,80,0.28)",
-                background:
-                  "linear-gradient(180deg, rgba(255,70,70,0.25), rgba(0,0,0,0.25))",
-                color: "rgba(255,255,255,0.92)",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
-              }}
-            >
-              Open Staking App →
-            </Link>
+  href="/app"
+  style={{
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "10px 14px",
+    borderRadius: 14,
+    fontSize: 14,
+    fontWeight: 800,
+    textDecoration: "none",
+    border: "1px solid rgba(255,80,80,0.28)",
+    background:
+      "linear-gradient(180deg, rgba(255,70,70,0.25), rgba(0,0,0,0.25))",
+    color: "rgba(255,255,255,0.92)",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
+  }}
+>
+  Open Staking App →
+</Link>
 
+            
             {/* Optional: keep the “flow” visible */}
             <Link
               href="/buy"

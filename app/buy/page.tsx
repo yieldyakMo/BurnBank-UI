@@ -173,7 +173,7 @@ export default function BuyPage() {
             </Link>
 
             <Link
-              href="/staking"
+              href="/app"
               style={{
                 display: "inline-flex",
                 alignItems: "center",

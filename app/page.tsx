@@ -26,6 +26,9 @@ const X_URL = "https://x.com/Monad_Burn_Bank";
 const GECKOTERMINAL_LINK =
   "https://www.geckoterminal.com/monad/pools/0x35d4bb30ccfd698acc2dd0778cb1581474263bad";
  
+const MINT_URL =
+  "https://thirdweb.com/monad/0xfE6B58241706d9e4689EeE369685F05a40d9837D/nfts/0";
+
 
 
 
